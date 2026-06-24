@@ -215,6 +215,7 @@ class LocalReasoningEngine:
         agent_name: str,
         system_prompt: str,
         context: Optional[str] = None,
+        state_manager: Optional[Any] = None,
     ) -> AgentResult:
         """
         Process a voice command for the agent pipeline.
@@ -226,21 +227,36 @@ class LocalReasoningEngine:
         The LLM interprets the command and returns a structured response that
         the orchestrator can route to mcp_tools/ for execution.
 
+        Graph-RAG context is injected automatically when a state_manager
+        with an active memory graph is provided — this gives the LLM
+        awareness of prior conversations without sending the full history.
+
         Args:
             transcript: Raw voice command transcript (agent name already stripped).
             agent_name: The agent's name for context.
             system_prompt: Agent system prompt from prompts.py.
             context: Optional conversation/document context.
+            state_manager: Optional StateManager for graph-RAG context injection.
 
         Returns:
             AgentResult with response text and parsed actions.
         """
         start_time = time.perf_counter()
 
-        # Build the user message with optional context
+        # Inject graph-RAG memory context if available
+        memory_context = ""
+        if state_manager is not None:
+            try:
+                memory_context = await state_manager.get_graph_context(transcript)
+            except Exception as e:
+                logger.warning("Graph context retrieval failed: %s", e)
+
+        # Build the user message with memory + conversation context
         user_message = transcript
+        if memory_context:
+            user_message = f"{memory_context}\n\n{user_message}"
         if context:
-            user_message = f"Context:\n{context}\n\nCommand: {transcript}"
+            user_message = f"Context:\n{context}\n\nCommand: {user_message}"
 
         result = await self.process_text(
             text=user_message,

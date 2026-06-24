@@ -182,6 +182,58 @@ def create_app() -> tuple[Flask, SocketIO]:
             "diarization_enabled": os.getenv("DIARIZATION_ENABLED", "false").lower() == "true",
         })
 
+    # ── Graph-RAG Memory API ─────────────────────────────────────────────
+
+    @app.route("/api/graph")
+    def graph_data():
+        """Get full graph in node_link_data format (matches graphify)."""
+        loop = _get_loop()
+        data = asyncio.run_coroutine_threadsafe(
+            state.memory_graph.get_graph_data(), loop
+        ).result(timeout=30)
+        return jsonify(data)
+
+    @app.route("/api/graph/clusters")
+    def graph_clusters():
+        """Get community assignments, labels, and cohesion scores."""
+        loop = _get_loop()
+        data = asyncio.run_coroutine_threadsafe(
+            state.memory_graph.get_clusters(), loop
+        ).result(timeout=30)
+        return jsonify(data)
+
+    @app.route("/api/graph/search")
+    def graph_search():
+        """Fuzzy search nodes by label. Query param: ?q=..."""
+        query = request.args.get("q", "").strip()
+        if not query:
+            return jsonify({"results": [], "error": "Missing query parameter ?q="}), 400
+        loop = _get_loop()
+        results = asyncio.run_coroutine_threadsafe(
+            state.memory_graph.search_nodes(query), loop
+        ).result(timeout=10)
+        return jsonify({"query": query, "results": results})
+
+    @app.route("/api/graph/node/<node_id>")
+    def graph_node_detail(node_id: str):
+        """Get full details for a single node + its neighbors."""
+        loop = _get_loop()
+        detail = asyncio.run_coroutine_threadsafe(
+            state.memory_graph.get_node_detail(node_id), loop
+        ).result(timeout=10)
+        if detail is None:
+            return jsonify({"error": f"Node '{node_id}' not found"}), 404
+        return jsonify(detail)
+
+    @app.route("/api/graph/stats")
+    def graph_stats():
+        """Get graph statistics: node/edge/community counts, density."""
+        loop = _get_loop()
+        stats = asyncio.run_coroutine_threadsafe(
+            state.memory_graph.get_stats(), loop
+        ).result(timeout=10)
+        return jsonify(stats)
+
     # ── WebSocket Events ────────────────────────────────────────────────
 
     @socketio.on("connect")

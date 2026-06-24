@@ -35,3 +35,9 @@ aiosqlite>=0.19
 
 # ── Utilities ───────────────────────────────────────────────────────────────
 python-dotenv>=1.0
+
+# ── Graph-RAG Memory & Clustering ───────────────────────────────────────────
+networkx>=3.1
+markdown>=3.5
+# Optional: graspologic for Leiden clustering (falls back to Louvain without it)
+# graspologic>=3.3

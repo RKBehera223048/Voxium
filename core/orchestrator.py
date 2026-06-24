@@ -195,6 +195,9 @@ class VoxiumOrchestrator:
         agent_name = os.getenv("AGENT_NAME", "Voxium")
         await self.state.set_agent_name(agent_name)
 
+        # Load persisted graph-RAG memory
+        await self.state.memory_graph.load()
+
         # Start the event loop
         self._task = asyncio.create_task(self._event_loop())
         logger.info("Orchestrator started (agent=%s)", agent_name)
@@ -468,6 +471,7 @@ class VoxiumOrchestrator:
             agent_name=agent_name,
             system_prompt=system_prompt,
             context=context,
+            state_manager=self.state,
         )
 
         if result.success:

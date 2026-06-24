@@ -2,7 +2,7 @@
 Voxium — Session State Manager
 ================================
 Thread-safe state tracking for the active document, conversation history,
-current session speakers, and orchestrator state.
+current session speakers, orchestrator state, and graph-RAG memory.
 
 Provides a centralized place for all pipeline stages to read/write state
 without race conditions (uses asyncio.Lock).
@@ -15,6 +15,8 @@ import time
 import logging
 from dataclasses import dataclass, field
 from typing import Optional, List, Dict, Any
+
+from core.memory_graph import MemoryGraph
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +72,7 @@ class StateManager:
         self._is_processing = False
         self._agent_name = "Voxium"
         self._listeners: List = []
+        self._memory_graph = MemoryGraph()
 
     # ── Document State ──────────────────────────────────────────────────
 
@@ -101,6 +104,14 @@ class StateManager:
             # Trim to max size
             if len(self._history) > self.MAX_HISTORY_TURNS:
                 self._history = self._history[-self.MAX_HISTORY_TURNS:]
+
+        # Ingest into graph-RAG memory (outside the main lock)
+        try:
+            await self._memory_graph.ingest(
+                content, metadata={"role": role},
+            )
+        except Exception as e:
+            logger.warning("Graph ingestion failed: %s", e)
 
     async def get_history(self, last_n: int = 10) -> List[ConversationTurn]:
         async with self._lock:
@@ -170,6 +181,9 @@ class StateManager:
                 "agent_name": self._agent_name,
                 "speaker_count": len(self._speakers),
                 "history_length": len(self._history),
+                "graph_nodes": self._memory_graph.node_count,
+                "graph_edges": self._memory_graph.edge_count,
+                "graph_communities": self._memory_graph.community_count,
             }
 
     # ── Agent Name ──────────────────────────────────────────────────────
@@ -181,3 +195,20 @@ class StateManager:
     async def get_agent_name(self) -> str:
         async with self._lock:
             return self._agent_name
+
+    # ── Graph-RAG Memory ────────────────────────────────────────────────
+
+    @property
+    def memory_graph(self) -> MemoryGraph:
+        """Access the graph-RAG memory engine."""
+        return self._memory_graph
+
+    async def get_graph_context(
+        self,
+        query: str,
+        max_tokens: int = 500,
+    ) -> str:
+        """Get relevant memory context from the graph for LLM prompts."""
+        return await self._memory_graph.query_context(
+            query, max_tokens=max_tokens,
+        )
