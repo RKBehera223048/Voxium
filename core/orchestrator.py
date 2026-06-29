@@ -195,8 +195,11 @@ class VoxiumOrchestrator:
         agent_name = os.getenv("AGENT_NAME", "Voxium")
         await self.state.set_agent_name(agent_name)
 
-        # Load persisted graph-RAG memory
-        await self.state.memory_graph.load()
+        # Initialize hybrid graph-vector memory (Cognee-style)
+        # This loads the persisted graph AND sets up the vector store + embeddings.
+        # The reasoning engine is passed in so the memory system can use
+        # LLM embeddings and LLM-based entity extraction when available.
+        await self.state.initialize_memory(reasoning_engine=self._reasoning)
 
         # Start the event loop
         self._task = asyncio.create_task(self._event_loop())

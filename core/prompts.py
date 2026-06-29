@@ -249,3 +249,100 @@ def get_custom_dictionary() -> List[str]:
     if not raw.strip():
         return []
     return [w.strip() for w in raw.split(",") if w.strip()]
+
+
+# =============================================================================
+# Entity Extraction Prompt (Cognee-style ECL Pipeline)
+# =============================================================================
+
+ENTITY_EXTRACTION_SYSTEM_PROMPT = """You are a knowledge graph extraction engine. Your task is to extract structured entities and relationships from conversational text.
+
+You MUST respond with ONLY a valid JSON object. No markdown, no explanation, no preamble, no code fences.
+
+The JSON object MUST follow this exact schema:
+{
+  "entities": [
+    {
+      "name": "exact entity name",
+      "type": "person|place|organization|concept|date|technical|event",
+      "description": "one-sentence description of this entity in context"
+    }
+  ],
+  "relationships": [
+    {
+      "source": "source entity name (must match an entity name above)",
+      "target": "target entity name (must match an entity name above)",
+      "relation": "verb or short phrase describing the relationship",
+      "description": "one-sentence fact expressed by this relationship"
+    }
+  ]
+}
+
+Rules:
+1. Extract ALL meaningful entities: people, places, organizations, concepts, dates, technical terms, events.
+2. Entity names should be normalized (e.g., "John" and "John Smith" → use "John Smith" if full name is known).
+3. Entity types must be one of: person, place, organization, concept, date, technical, event.
+4. Relationships must reference entities that exist in your entities list.
+5. Relationship "relation" should be a concise verb phrase (e.g., "works_at", "discussed", "scheduled_for").
+6. Extract at least the co-occurrence relationships between entities mentioned in the same sentence.
+7. If no entities are found, return {"entities": [], "relationships": []}.
+8. Do NOT invent entities or relationships not supported by the text.
+
+Example input: "Sarah told me she's moving to Berlin next month for her new job at Siemens."
+Example output:
+{"entities":[{"name":"Sarah","type":"person","description":"Person who is relocating"},{"name":"Berlin","type":"place","description":"City Sarah is moving to"},{"name":"Siemens","type":"organization","description":"Sarah's new employer"},{"name":"next month","type":"date","description":"When Sarah is moving"}],"relationships":[{"source":"Sarah","target":"Berlin","relation":"moving_to","description":"Sarah is relocating to Berlin"},{"source":"Sarah","target":"Siemens","relation":"works_at","description":"Sarah has a new job at Siemens"},{"source":"Sarah","target":"next month","relation":"scheduled_for","description":"The move is planned for next month"}]}
+
+Now extract entities and relationships from the following text. Respond with ONLY the JSON object:"""
+
+
+def build_entity_extraction_prompt(text: str) -> str:
+    """
+    Build the complete entity extraction prompt for the LLM.
+
+    This prompt is designed to force local GGUF models to output reliable
+    structured JSON for the Cognee-style ECL pipeline. The few-shot example
+    and explicit schema definition help small models stay on-format.
+
+    Adapted from Cognee's extract_content_graph() prompt pattern in
+    cognee/infrastructure/llm/extraction.py.
+
+    Args:
+        text: The raw text to extract entities from.
+
+    Returns:
+        Complete system prompt string.
+    """
+    return ENTITY_EXTRACTION_SYSTEM_PROMPT
+
+
+# =============================================================================
+# Graph Context Prompt (for multi-hop retrieval results)
+# =============================================================================
+
+def build_graph_context_prompt(
+    context: str,
+    query: str,
+) -> str:
+    """
+    Format multi-hop graph retrieval results into a context block for the LLM.
+
+    Adapted from Cognee's graph_context_for_question.txt prompt template used
+    in GraphCompletionRetriever.get_completion_from_context().
+
+    Args:
+        context: The structured context string from graph_completion_search().
+        query: The original user query.
+
+    Returns:
+        Formatted context string for injection into the LLM prompt.
+    """
+    if not context:
+        return query
+
+    return (
+        f"Use the following memory context to inform your response. "
+        f"The context contains relevant facts, entities, and relationships "
+        f"from prior conversations.\n\n"
+        f"{context}\n\n"
+        f"User query: {query}"
+    )

@@ -209,6 +209,120 @@ class LocalReasoningEngine:
             max_tokens=max_tokens,
         )
 
+    # ── LLM Entity Extraction (Cognee-style cognify) ────────────────────
+
+    async def extract_entities_json(
+        self,
+        text: str,
+    ) -> tuple:
+        """
+        Use the local LLM to extract structured entities and relationships.
+
+        This is the LLM-powered extraction path for the Cognee-style cognify()
+        pipeline. It calls the LLM with the ENTITY_EXTRACTION_SYSTEM_PROMPT
+        and parses the JSON response into Entity and Relationship objects.
+
+        Adapted from Cognee's extract_content_graph() in
+        cognee/infrastructure/llm/extraction.py which uses an LLM to produce
+        a KnowledgeGraph (nodes + edges) from text chunks.
+
+        Args:
+            text: Raw text to extract entities from.
+
+        Returns:
+            Tuple of (List[Entity], List[Relationship]) matching the interface
+            of entity_extractor.extract_all().
+        """
+        import json as _json
+        import re as _re
+        from core.entity_extractor import Entity, Relationship, make_entity_id
+        from core.prompts import build_entity_extraction_prompt
+
+        system_prompt = build_entity_extraction_prompt(text)
+        result = await self.process_text(
+            text=text,
+            system_prompt=system_prompt,
+            temperature=0.1,  # Low temperature for structured output
+            max_tokens=1024,
+        )
+
+        if not result.success or not result.text:
+            return [], []
+
+        # Parse the JSON response — handle common LLM formatting issues
+        raw = result.text.strip()
+
+        # Strip markdown code fences if the model added them
+        if raw.startswith("```"):
+            raw = _re.sub(r'^```(?:json)?\s*', '', raw)
+            raw = _re.sub(r'\s*```$', '', raw)
+
+        # Try to find the JSON object
+        try:
+            data = _json.loads(raw)
+        except _json.JSONDecodeError:
+            # Try to extract JSON from surrounding text
+            json_match = _re.search(r'\{.*\}', raw, _re.DOTALL)
+            if json_match:
+                try:
+                    data = _json.loads(json_match.group())
+                except _json.JSONDecodeError:
+                    logger.warning("extract_entities_json: failed to parse LLM JSON output")
+                    return [], []
+            else:
+                logger.warning("extract_entities_json: no JSON found in LLM output")
+                return [], []
+
+        # Convert to Entity/Relationship objects
+        entities: list = []
+        entity_name_to_id: dict = {}
+        seen_names: set = set()
+
+        for item in data.get("entities", []):
+            name = item.get("name", "").strip()
+            etype = item.get("type", "concept").strip().lower()
+            if not name or name.lower() in seen_names:
+                continue
+            seen_names.add(name.lower())
+
+            # Validate type
+            valid_types = {"person", "place", "organization", "concept", "date", "technical", "event"}
+            if etype not in valid_types:
+                etype = "concept"
+
+            eid = make_entity_id(name, etype)
+            entity_name_to_id[name.lower()] = eid
+            entities.append(Entity(
+                id=eid,
+                label=name,
+                type=etype,
+                confidence="EXTRACTED",
+            ))
+
+        relationships: list = []
+        for item in data.get("relationships", []):
+            source_name = item.get("source", "").strip().lower()
+            target_name = item.get("target", "").strip().lower()
+            relation = item.get("relation", "related_to").strip()
+
+            source_id = entity_name_to_id.get(source_name)
+            target_id = entity_name_to_id.get(target_name)
+
+            if source_id and target_id and source_id != target_id:
+                relationships.append(Relationship(
+                    source_id=source_id,
+                    target_id=target_id,
+                    relation=relation,
+                    confidence="EXTRACTED",
+                    weight=2.0,  # LLM-extracted relationships get higher weight
+                ))
+
+        logger.debug(
+            "extract_entities_json: %d entities, %d relationships from LLM",
+            len(entities), len(relationships),
+        )
+        return entities, relationships
+
     async def process_agent_command(
         self,
         transcript: str,
@@ -227,9 +341,10 @@ class LocalReasoningEngine:
         The LLM interprets the command and returns a structured response that
         the orchestrator can route to mcp_tools/ for execution.
 
-        Graph-RAG context is injected automatically when a state_manager
-        with an active memory graph is provided — this gives the LLM
-        awareness of prior conversations without sending the full history.
+        Graph-RAG context is now injected via the hybrid graph_completion_search
+        (Cognee-style multi-hop retrieval) when a state_manager with an active
+        hybrid memory is provided. This gives the LLM multi-hop awareness
+        of prior conversations instead of simple BFS traversal.
 
         Args:
             transcript: Raw voice command transcript (agent name already stripped).
@@ -243,18 +358,21 @@ class LocalReasoningEngine:
         """
         start_time = time.perf_counter()
 
-        # Inject graph-RAG memory context if available
+        # Inject graph-RAG memory context using hybrid search if available
         memory_context = ""
         if state_manager is not None:
             try:
+                # Use the upgraded graph_completion_search for multi-hop context
                 memory_context = await state_manager.get_graph_context(transcript)
             except Exception as e:
                 logger.warning("Graph context retrieval failed: %s", e)
 
         # Build the user message with memory + conversation context
+        # Format using the graph context prompt builder
         user_message = transcript
         if memory_context:
-            user_message = f"{memory_context}\n\n{user_message}"
+            from core.prompts import build_graph_context_prompt
+            user_message = build_graph_context_prompt(memory_context, transcript)
         if context:
             user_message = f"Context:\n{context}\n\nCommand: {user_message}"
 
@@ -278,6 +396,12 @@ class LocalReasoningEngine:
             response_text=result.text,
             elapsed_ms=elapsed_ms,
         )
+
+    # ── LLM Access ──────────────────────────────────────────────────────
+
+    def get_llm_instance(self):
+        """Return the raw llama-cpp Llama instance (for embedding provider)."""
+        return self._llm
 
     def is_available(self) -> bool:
         """Check if the LLM model file exists and llama-cpp is importable."""
