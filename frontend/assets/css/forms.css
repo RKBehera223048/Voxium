@@ -1,0 +1,139 @@
+/* Forms & Inputs Styles */
+.form-group {
+  margin-bottom: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Underlined Parchment Line Style */
+.form-label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 6px;
+  transition: color var(--transition-fast);
+}
+
+.form-control {
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background-color: transparent;
+  padding: 8px 0;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--transition-fast);
+  border-radius: 0;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+}
+
+.form-group:focus-within .form-label {
+  color: var(--primary);
+}
+
+/* Boxed input alternative for standard cards */
+.form-control-box {
+  background-color: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.form-control-box:focus {
+  border-color: var(--primary);
+}
+
+/* Toggle Switch Slider - Premium Pill Style */
+.switch-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.switch-label-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.switch-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.switch-desc {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.switch-input {
+  display: none;
+}
+
+.switch-slider {
+  width: 44px;
+  height: 24px;
+  background-color: var(--border);
+  border-radius: var(--radius-full);
+  position: relative;
+  transition: background-color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.switch-slider::after {
+  content: '';
+  width: 18px;
+  height: 18px;
+  background-color: #ffffff;
+  border-radius: var(--radius-full);
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.switch-input:checked + .switch-slider {
+  background-color: var(--primary);
+}
+
+.switch-input:checked + .switch-slider::after {
+  transform: translateX(20px);
+}
+
+/* Textarea input */
+textarea.form-control-box {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Checkbox control */
+.checkbox-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.checkbox-input {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+}

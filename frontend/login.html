@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Voxium — AI Personal Memory System</title>
+  <meta name="description" content="Unlock your digital second brain. A secure, local-first personal memory vault powered by local LLMs and Whisper transcription.">
+  
+  <!-- Core Design System Stylesheets -->
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/buttons.css">
+  <link rel="stylesheet" href="assets/css/cards.css">
+  <link rel="stylesheet" href="assets/css/forms.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+
+  <style>
+    .login-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100vw;
+      background-color: var(--bg-primary);
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+    }
+    
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      background-color: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-5);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+    
+    .login-logo-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: var(--space-4);
+    }
+    
+    .login-logo-accent {
+      width: 48px;
+      height: 48px;
+      color: var(--primary);
+      margin-bottom: var(--space-2);
+      opacity: 0.85;
+    }
+    
+    .login-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.85rem;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    
+    .login-subtitle {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 6px;
+      font-family: var(--font-sans);
+    }
+
+    /* Small elegant Indian accent in onboarding corner */
+    .mandala-corner {
+      position: absolute;
+      top: -24px;
+      right: -24px;
+      width: 80px;
+      height: 80px;
+      color: var(--border-light);
+      opacity: 0.4;
+      pointer-events: none;
+      transform: rotate(45deg);
+    }
+  </style>
+</head>
+<body>
+  <main class="login-container">
+    <div class="login-card fade-in">
+      
+      <!-- Minimal Indian Accent (Refined Sun Mandala) -->
+      <svg class="mandala-corner" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-linecap="round">
+        <circle cx="50" cy="50" r="35" stroke-width="1" stroke-dasharray="2 2"/>
+        <circle cx="50" cy="50" r="25" stroke-width="1.2"/>
+        <circle cx="50" cy="50" r="15" stroke-width="0.8" stroke-dasharray="1 2"/>
+        <circle cx="50" cy="50" r="5" stroke-width="1"/>
+        <!-- Radiating ray ticks -->
+        <path d="M 50,5 L 50,15 M 50,85 L 50,95 M 5,50 L 15,50 M 85,50 L 95,50 M 18,18 L 25,25 M 75,75 L 82,82 M 18,82 L 25,75 M 75,18 L 82,25" stroke-width="0.8" />
+      </svg>
+      
+      <div class="login-logo-header">
+        <!-- Madhubani Sun/Lotus Logo Accent -->
+        <svg class="login-logo-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.15" />
+          <path d="M12 2 C13 5 15 5 12 8 C9 5 11 5 12 2 Z" fill="currentColor" />
+          <path d="M12 22 C13 19 15 19 12 16 C9 19 11 19 12 22 Z" fill="currentColor" />
+          <path d="M2 12 C5 13 5 15 8 12 C5 9 5 11 2 12 Z" fill="currentColor" />
+          <path d="M22 12 C19 13 19 15 16 12 C19 9 19 11 22 12 Z" fill="currentColor" />
+          <circle cx="12" cy="12" r="7" stroke-dasharray="1 2" />
+        </svg>
+        <h1 class="login-title">VOXIUM</h1>
+        <p class="login-subtitle">A digital scribe for your memories</p>
+      </div>
+      
+      <form id="login-form" onsubmit="event.preventDefault(); window.location.href='dashboard.html';">
+        <div class="form-group mb-3">
+          <label class="form-label" for="profile-name">Local Profile Name</label>
+          <input type="text" id="profile-name" class="form-control" placeholder="e.g. Scribe" required value="Scribe">
+        </div>
+        
+        <div class="form-group mb-4">
+          <label class="form-label" for="vault-passphrase">Decryption Passphrase</label>
+          <input type="password" id="vault-passphrase" class="form-control" placeholder="••••••••••••••" required value="localllmsecret">
+          <p style="font-size: 0.7rem; color: var(--muted); margin-top: 6px; line-height:1.35;">
+            🔒 All data stays stored inside local ChromaDB and SQLite databases. The decryption key never leaves your machine.
+          </p>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+          <span>Unlock Second Brain</span>
+          <svg viewBox="0 0 24 24" width="16" height="16">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="currentColor"/>
+          </svg>
+        </button>
+      </form>
+      
+      <div style="margin-top: 24px; text-align: center; font-size: 0.75rem; color: var(--muted);">
+        <p>Offline Mode Status: <span style="color: var(--success); font-weight: 600;">Local-Only Verified</span></p>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Common JS Utilities -->
+  <script src="js/utils.js"></script>
+  <script src="js/animations.js"></script>
+</body>
+</html>
