@@ -72,6 +72,3 @@ pytest tests/test_api.py -v
 - `core/`: State management and memory graph retrieval.
 - `audio/`: VAD, STT, and TTS engines.
 - `memory/`: Vector and Graph-based local storage (ChromaDB + SQLite).
-
-## License
-MIT License
