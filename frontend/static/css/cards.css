@@ -1,0 +1,148 @@
+/* Premium Card System */
+.card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card Hover Elevation - Editorial Minimal Style */
+.card-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--secondary);
+  box-shadow: var(--shadow-md);
+  background-color: #ffffff;
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-2);
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.card-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Card Body */
+.card-body {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--text);
+  flex: 1;
+}
+
+/* Card Footer */
+.card-footer {
+  margin-top: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* List Card (items stacked vertically) */
+.list-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.list-item:hover {
+  border-color: var(--border);
+  background-color: #ffffff;
+}
+
+.list-item-content {
+  flex: 1;
+}
+
+.list-item-title {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.list-item-desc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Status Pill */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.status-pill-success {
+  background-color: rgba(62, 143, 86, 0.08);
+  border-color: rgba(62, 143, 86, 0.2);
+  color: var(--success);
+}
+
+.status-pill-warning {
+  background-color: rgba(201, 155, 0, 0.08);
+  border-color: rgba(201, 155, 0, 0.2);
+  color: var(--warning);
+}
+
+.status-pill-danger {
+  background-color: rgba(186, 26, 26, 0.08);
+  border-color: rgba(186, 26, 26, 0.2);
+  color: var(--error);
+}
+
+/* Indian Accent Mini-Illustration (Folk-Futurism Accent) */
+.folk-accent-icon {
+  opacity: 0.15;
+  position: absolute;
+  bottom: -15px;
+  right: -15px;
+  color: var(--primary);
+  transform: rotate(-15deg);
+  transition: transform var(--transition-normal), opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.card:hover .folk-accent-icon {
+  opacity: 0.3;
+  transform: rotate(0deg) scale(1.1);
+}

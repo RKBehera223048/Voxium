@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — Voxium</title>
+  <meta name="description" content="Configure models, manage offline vector databases, select audio input devices, and download decryption profiles.">
+  
+  <!-- Core Design System Stylesheets -->
+  <link rel="stylesheet" href="/static/css/variables.css">
+  <link rel="stylesheet" href="/static/css/global.css">
+  <link rel="stylesheet" href="/static/css/layout.css">
+  <link rel="stylesheet" href="/static/css/sidebar.css">
+  <link rel="stylesheet" href="/static/css/navbar.css">
+  <link rel="stylesheet" href="/static/css/buttons.css">
+  <link rel="stylesheet" href="/static/css/cards.css">
+  <link rel="stylesheet" href="/static/css/forms.css">
+  <!-- Page Specific Style -->
+  <link rel="stylesheet" href="/static/css/settings.css">
+  <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- 1. LEFT SIDEBAR NAVIGATION PANEL -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo" onclick="window.location.href='dashboard.html'">
+          <!-- Refined Madhubani Sun/Lotus Icon Accent (15% visual weight) -->
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.15" />
+            <path d="M12 2 C13 5 15 5 12 8 C9 5 11 5 12 2 Z" fill="currentColor" />
+            <path d="M12 22 C13 19 15 19 12 16 C9 19 11 19 12 22 Z" fill="currentColor" />
+            <path d="M2 12 C5 13 5 15 8 12 C5 9 5 11 2 12 Z" fill="currentColor" />
+            <path d="M22 12 C19 13 19 15 16 12 C19 9 19 11 22 12 Z" fill="currentColor" />
+            <circle cx="12" cy="12" r="7" stroke-dasharray="1 2" />
+          </svg>
+          <span class="logo-text">VOXIUM</span>
+        </div>
+        <button id="sidebar-toggle-btn" class="sidebar-toggle" title="Toggle Navigation Menu">
+          <svg viewBox="0 0 24 24" width="18" height="18">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+      
+      <nav style="flex:1;">
+        <ul class="sidebar-nav">
+          <li>
+            <a href="dashboard.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="meeting.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Meeting Mode</span>
+            </a>
+          </li>
+          <li>
+            <a href="editor.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Editor</span>
+            </a>
+          </li>
+          <li>
+            <a href="notes.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Notes</span>
+            </a>
+          </li>
+          <li>
+            <a href="settings.html" class="nav-item-link active">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="listening-panel">
+          <div class="listening-info">
+            <span class="listening-badge active"></span>
+            <span class="listening-text">Always Listening</span>
+          </div>
+          <label class="switch-control" style="padding:0;">
+            <input type="checkbox" class="switch-input listening-toggle" checked>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- 2. TOP NAVIGATION BAR -->
+    <div class="main-content">
+      <header class="navbar">
+        <div class="nav-search-trigger" title="Global command palette">
+          <svg viewBox="0 0 24 24" width="16" height="16" class="search-icon-svg"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+          <span>Semantic search memories...</span>
+          <span class="search-hint">Ctrl K</span>
+        </div>
+        
+        <div class="nav-stats">
+          <div class="stat-badge">
+            <span id="whisper-status-dot" class="stat-indicator"></span>
+            <span id="whisper-status-label">Whisper: Offline</span>
+          </div>
+          <div class="stat-badge">
+            <span id="llm-status-dot" class="stat-indicator"></span>
+            <span id="llm-status-label">LLM: Offline</span>
+          </div>
+        </div>
+        
+        <div class="nav-user" onclick="window.location.href='settings.html'">
+          <div class="user-avatar">S</div>
+          <div class="user-info">
+            <span class="user-name">Scribe</span>
+            <span class="user-role">Local Vault</span>
+          </div>
+        </div>
+      </header>
+      
+      <!-- 3. SCROLLABLE CONTENT BODY AREA -->
+      <main class="content-wrapper">
+        <section class="section-header mb-4">
+          <h2 class="display-lg">Settings</h2>
+          <p class="subtitle">Configure models parameters, sync pathways, and decrypt local keys.</p>
+        </section>
+        
+        <!-- Settings page split sidebar grid layout -->
+        <div class="settings-layout">
+          
+          <!-- Left sub-navigation tab menus -->
+          <ul class="settings-menu">
+            <li class="settings-menu-item active" data-pane-id="pane-appearance">Appearance</li>
+            <li class="settings-menu-item" data-pane-id="pane-voice">Voice & Capture</li>
+            <li class="settings-menu-item" data-pane-id="pane-models">Models Directory</li>
+            <li class="settings-menu-item" data-pane-id="pane-storage">Memory & Storage</li>
+            <li class="settings-menu-item" data-pane-id="pane-account">Vault Profile</li>
+          </ul>
+          
+          <!-- Right tab configurations panes -->
+          <div class="settings-content-wrapper">
+            
+            <!-- Pane 1: Appearance theme styling configs -->
+            <div id="pane-appearance" class="settings-pane active">
+              <div class="vine-corner-tr"></div>
+              <h3 class="settings-title">Appearance</h3>
+              <p class="settings-desc">Fine-tune the editorial theme display and parameters.</p>
+              
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">Parchment Canvas Contrast</span>
+                  <span class="settings-row-desc">Switch between baseline warm cream and high-contrast pages background.</span>
+                </div>
+                <select class="form-control-box" style="width:160px;">
+                  <option selected>Cream (#FFF9ED)</option>
+                  <option>Pure White (#FFFFFF)</option>
+                  <option>Soft Gray (#F4F4F0)</option>
+                </select>
+              </div>
+              
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">Serif Title Typeface</span>
+                  <span class="settings-row-desc">Typography choice for headers and summaries.</span>
+                </div>
+                <select class="form-control-box" style="width:160px;">
+                  <option selected>Literata (Serif)</option>
+                  <option>Lora (Serif)</option>
+                  <option>System Default</option>
+                </select>
+              </div>
+
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">Animations Fluidity</span>
+                  <span class="settings-row-desc">Enable smooth fade-ins and button click micro-interactions.</span>
+                </div>
+                <label class="switch-control" style="padding:0;">
+                  <input type="checkbox" class="switch-input" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Pane 2: Speech capture inputs settings -->
+            <div id="pane-voice" class="settings-pane">
+              <div class="vine-corner-tr"></div>
+              <h3 class="settings-title">Voice & Capture</h3>
+              <p class="settings-desc">Configure speech microphones options and TTS outputs voice pitch.</p>
+              
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">Audio Input Device</span>
+                  <span class="settings-row-desc">Select microphone feed for always-listening mode.</span>
+                </div>
+                <select class="form-control-box" style="width:240px;">
+                  <option selected>System Default Mic</option>
+                  <option>External Array Microphone</option>
+                  <option>Virtual Audio Buffer Channel</option>
+                </select>
+              </div>
+              
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">Always-Listening Mode</span>
+                  <span class="settings-row-desc">Allow microphone buffering automatically when app is running.</span>
+                </div>
+                <label class="switch-control" style="padding:0;">
+                  <input type="checkbox" class="switch-input listening-toggle" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">Voice Assistant Engine</span>
+                  <span class="settings-row-desc">Allow text-to-speech synthesis reactions upon assistant completion.</span>
+                </div>
+                <label class="switch-control" style="padding:0;">
+                  <input type="checkbox" class="switch-input" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Pane 3: Models file paths config inputs -->
+            <div id="pane-models" class="settings-pane">
+              <div class="vine-corner-tr"></div>
+              <h3 class="settings-title">Local Models Directory</h3>
+              <p class="settings-desc">Set local parameters paths for offline inference weights models files.</p>
+              
+              <div class="form-group mb-3">
+                <label class="form-label" for="model-llm-path">Local LLM weights path (.GGUF)</label>
+                <input type="text" id="model-llm-path" class="form-control-box" value="C:/Users/LENOVO/.voxium/models/llama-3-8b-instruct.Q4_K_M.gguf" style="width: 100%;">
+              </div>
+              
+              <div class="form-group mb-3">
+                <label class="form-label" for="model-whisper-path">Whisper model size index weights (.bin)</label>
+                <select id="model-whisper-path" class="form-control-box" style="width: 100%;">
+                  <option selected>Whisper Base (English only) — 140MB</option>
+                  <option>Whisper Small — 460MB</option>
+                  <option>Whisper Medium — 1.5GB</option>
+                </select>
+              </div>
+
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">GPU Acceleration</span>
+                  <span class="settings-row-desc">Allow CUDA or Vulkan pipelines to accelerate local token prefill speed.</span>
+                </div>
+                <label class="switch-control" style="padding:0;">
+                  <input type="checkbox" class="switch-input" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Pane 4: DB capacity statistics parameters -->
+            <div id="pane-storage" class="settings-pane">
+              <div class="vine-corner-tr"></div>
+              <h3 class="settings-title">Memory & Storage</h3>
+              <p class="settings-desc">Explore embedded database sizes metrics and prune vector indexes.</p>
+              
+              <div class="db-stats-card mb-3">
+                <div class="db-stats-title">Vector DB Metrics (ChromaDB)</div>
+                <div class="db-labels-row mb-1">
+                  <span>Total Embedded Nodes</span>
+                  <span>142 vectors</span>
+                </div>
+                <div class="db-gauge-container">
+                  <div class="db-gauge-bar" style="width: 42%;"></div>
+                </div>
+                <div class="db-labels-row" style="font-size:0.7rem;">
+                  <span>Allocated: 24 MB</span>
+                  <span>Free limit: 250 MB (Local storage)</span>
+                </div>
+              </div>
+
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">Prune Orphan Nodes</span>
+                  <span class="settings-row-desc">Prune semantic memories nodes with zero backlinks or references.</span>
+                </div>
+                <button class="btn btn-sm btn-light" onclick="Voxium.utils.notify('Orphan memory nodes pruned.');">Prune Caches</button>
+              </div>
+
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">Rebuild Graph Index</span>
+                  <span class="settings-row-desc">Rebuild vector indexing trees across note registers.</span>
+                </div>
+                <button class="btn btn-sm btn-light" onclick="Voxium.utils.notify('Rebuilding vector database indexes...');">Rebuild DB</button>
+              </div>
+            </div>
+            
+            <!-- Pane 5: Decrypt vault account settings -->
+            <div id="pane-account" class="settings-pane">
+              <div class="vine-corner-tr"></div>
+              <h3 class="settings-title">Vault Decryption Profile</h3>
+              <p class="settings-desc">Manage local profile keys, backups directories paths, and decrypt logs.</p>
+              
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">Profile Identity</span>
+                  <span class="settings-row-desc">Local security handle for decrypting files.</span>
+                </div>
+                <span class="body-md" style="font-weight: 600;">Scribe</span>
+              </div>
+
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">Local DB Export Backup</span>
+                  <span class="settings-row-desc">Export database and local note registers as encrypted JSON bundle.</span>
+                </div>
+                <button class="btn btn-sm btn-primary" onclick="Voxium.utils.notify('Vault bundle encrypted & downloaded successfully.');">Export Vault</button>
+              </div>
+
+              <div class="settings-row">
+                <div class="settings-row-label">
+                  <span class="settings-row-title">Lock Profile</span>
+                  <span class="settings-row-desc">Wipe runtime buffers and return to login decryption portal.</span>
+                </div>
+                <button class="btn btn-sm btn-ghost" style="color: var(--primary);" onclick="window.location.href='login.html'">Lock Vault</button>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- FLOATING VOICE BUTTON -->
+  <button class="btn-voice-float" title="Ask Voxium Assistant" aria-label="Activate Voice Assistant">
+    <svg viewBox="0 0 24 24" width="20" height="20">
+      <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z" fill="currentColor"/>
+    </svg>
+  </button>
+
+  <!-- SEARCH MODAL OVERLAY -->
+  <div id="search-modal" class="search-modal">
+    <div class="search-box">
+      <div class="search-input-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" class="search-icon-svg"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+        <input type="text" id="search-modal-input" class="search-modal-input" placeholder="Ask questions or type to search memories...">
+      </div>
+      <div id="search-results" class="search-results">
+        <div style="padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem;">
+          Type to search semantic memories and transcript segments...
+        </div>
+      </div>
+      <div class="search-modal-footer">
+        <span>Press <kbd>Esc</kbd> to exit</span>
+        <span>Use <kbd>↑</kbd><kbd>↓</kbd> to navigate</span>
+        <span>Press <kbd>Enter</kbd> to select</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Common & Page JS Modules -->
+  <script src="/static/js/utils.js"></script>
+  <script src="/static/js/animations.js"></script>
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/sidebar.js"></script>
+  <script src="/static/js/navbar.js"></script>
+  <script src="/static/js/voice.js"></script>
+</body>
+</html>

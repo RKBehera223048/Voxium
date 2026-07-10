@@ -1,0 +1,97 @@
+/* App Main Layout Structure */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Sidebar navigation is positioned on the left, main-content occupies the rest */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  transition: padding-left var(--transition-normal);
+}
+
+/* Content Container Scrollable wrapper */
+.content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-4) var(--space-6);
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Grid Layouts - Flexible Column Cards */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.grid-main-side {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-4);
+}
+
+/* Flex Helper Utilities */
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-align {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Spacing Helpers */
+.mb-1 { margin-bottom: var(--space-1); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-3 { margin-bottom: var(--space-3); }
+.mb-4 { margin-bottom: var(--space-4); }
+
+.mt-1 { margin-top: var(--space-1); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-3 { margin-top: var(--space-3); }
+.mt-4 { margin-top: var(--space-4); }
+
+/* Dividers & Rule separators - Hairline style */
+.divider {
+  height: 1px;
+  background-color: var(--border-light);
+  width: 100%;
+  margin: var(--space-3) 0;
+  border: none;
+}
+
+/* Standard Header for Sections */
+.section-header {
+  margin-bottom: var(--space-3);
+}
+
+.section-header .subtitle {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 4px;
+}

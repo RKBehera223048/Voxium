@@ -153,8 +153,7 @@ class VADPipeline:
             logger.info("Loading Silero VAD model (first-time download may take a moment)...")
 
             # Run the blocking torch.hub.load in a thread to keep async
-            loop = asyncio.get_event_loop()
-            model, utils = await loop.run_in_executor(
+            model, utils = await asyncio.get_running_loop().run_in_executor(
                 None, self._load_silero_model
             )
             self._silero_model = model
@@ -192,7 +191,7 @@ class VADPipeline:
         """
         # ── Step 1: Convert to PCM float32 16kHz ──
         try:
-            samples = await asyncio.get_event_loop().run_in_executor(
+            samples = await asyncio.get_running_loop().run_in_executor(
                 None, convert_to_pcm_16k, audio_bytes, source_format
             )
         except Exception as e:
@@ -221,7 +220,7 @@ class VADPipeline:
         # ── Step 3: Tier 2 — Silero VAD ──
         await self._ensure_silero_loaded()
 
-        speech_segments = await asyncio.get_event_loop().run_in_executor(
+        speech_segments = await asyncio.get_running_loop().run_in_executor(
             None, self._run_silero_vad, samples
         )
 

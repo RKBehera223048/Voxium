@@ -1,0 +1,174 @@
+/* Button System */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.2;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Primary - Madhubani Red */
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.btn-primary:active {
+  background-color: #6a0b10;
+}
+
+/* Secondary - Indigo Blue Outline */
+.btn-secondary {
+  background-color: transparent;
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(78, 96, 120, 0.05);
+}
+
+.btn-secondary:active {
+  background-color: rgba(78, 96, 120, 0.1);
+}
+
+/* Tertiary/Ghost - Charcoal text only with micro-leaf hover */
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text);
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.btn-ghost::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background-color: var(--primary);
+  border-radius: var(--radius-full);
+  opacity: 0;
+  transform: scale(0);
+  transition: all var(--transition-fast);
+}
+
+.btn-ghost:hover {
+  background-color: rgba(31, 28, 11, 0.03);
+  color: var(--primary);
+}
+
+.btn-ghost:hover::before {
+  opacity: 1;
+  transform: scale(1);
+  margin-right: 4px;
+}
+
+/* Outline light button */
+.btn-light {
+  background-color: #ffffff;
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.btn-light:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--muted);
+}
+
+/* Floating Voice Action Toggle - Pulse Animation */
+.btn-voice-float {
+  position: fixed;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background-color: var(--primary);
+  color: #ffffff;
+  border: none;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  transition: all var(--transition-normal);
+}
+
+.btn-voice-float:hover {
+  background-color: var(--primary-hover);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-voice-float.recording {
+  background-color: var(--error);
+  animation: float-pulse-red 2s infinite;
+}
+
+@keyframes float-pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(186, 26, 26, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(186, 26, 26, 0);
+  }
+}
+
+/* Ripple effect setup (JS created) */
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(0);
+  animation: ripple-anim 0.6s linear;
+  pointer-events: none;
+}
+
+.btn-secondary .ripple-effect,
+.btn-ghost .ripple-effect {
+  background: rgba(132, 15, 22, 0.15);
+}
+
+@keyframes ripple-anim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Action Icons sizes */
+.btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+.btn-lg {
+  padding: 12px 24px;
+  font-size: 0.95rem;
+}
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes Library — Voxium</title>
+  <meta name="description" content="Explore your semantic database memory nodes. Search transcripts, filter by tags, and read local journals.">
+  
+  <!-- Core Design System Stylesheets -->
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/sidebar.css">
+  <link rel="stylesheet" href="assets/css/navbar.css">
+  <link rel="stylesheet" href="assets/css/buttons.css">
+  <link rel="stylesheet" href="assets/css/cards.css">
+  <link rel="stylesheet" href="assets/css/forms.css">
+  <!-- Page Specific Style -->
+  <link rel="stylesheet" href="assets/css/notes.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- 1. LEFT SIDEBAR NAVIGATION PANEL -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo" onclick="window.location.href='dashboard.html'">
+          <!-- Refined Madhubani Sun/Lotus Icon Accent (15% visual weight) -->
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.15" />
+            <path d="M12 2 C13 5 15 5 12 8 C9 5 11 5 12 2 Z" fill="currentColor" />
+            <path d="M12 22 C13 19 15 19 12 16 C9 19 11 19 12 22 Z" fill="currentColor" />
+            <path d="M2 12 C5 13 5 15 8 12 C5 9 5 11 2 12 Z" fill="currentColor" />
+            <path d="M22 12 C19 13 19 15 16 12 C19 9 19 11 22 12 Z" fill="currentColor" />
+            <circle cx="12" cy="12" r="7" stroke-dasharray="1 2" />
+          </svg>
+          <span class="logo-text">VOXIUM</span>
+        </div>
+        <button id="sidebar-toggle-btn" class="sidebar-toggle" title="Toggle Navigation Menu">
+          <svg viewBox="0 0 24 24" width="18" height="18">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+      
+      <nav style="flex:1;">
+        <ul class="sidebar-nav">
+          <li>
+            <a href="dashboard.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="meeting.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Meeting Mode</span>
+            </a>
+          </li>
+          <li>
+            <a href="editor.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Editor</span>
+            </a>
+          </li>
+          <li>
+            <a href="notes.html" class="nav-item-link active">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Notes</span>
+            </a>
+          </li>
+          <li>
+            <a href="settings.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="listening-panel">
+          <div class="listening-info">
+            <span class="listening-badge active"></span>
+            <span class="listening-text">Always Listening</span>
+          </div>
+          <label class="switch-control" style="padding:0;">
+            <input type="checkbox" class="switch-input listening-toggle" checked>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- 2. TOP NAVIGATION BAR -->
+    <div class="main-content">
+      <header class="navbar">
+        <div class="nav-search-trigger" title="Global command palette">
+          <svg viewBox="0 0 24 24" width="16" height="16" class="search-icon-svg"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+          <span>Semantic search memories...</span>
+          <span class="search-hint">Ctrl K</span>
+        </div>
+        
+        <div class="nav-stats">
+          <div class="stat-badge">
+            <span id="whisper-status-dot" class="stat-indicator"></span>
+            <span id="whisper-status-label">Whisper: Offline</span>
+          </div>
+          <div class="stat-badge">
+            <span id="llm-status-dot" class="stat-indicator"></span>
+            <span id="llm-status-label">LLM: Offline</span>
+          </div>
+        </div>
+        
+        <div class="nav-user" onclick="window.location.href='settings.html'">
+          <div class="user-avatar">S</div>
+          <div class="user-info">
+            <span class="user-name">Scribe</span>
+            <span class="user-role">Local Vault</span>
+          </div>
+        </div>
+      </header>
+      
+      <!-- 3. SCROLLABLE CONTENT BODY AREA -->
+      <main class="content-wrapper">
+        <section class="section-header mb-4">
+          <h2 class="display-lg">Memories Vault</h2>
+          <p class="subtitle">Search and filter vector nodes across your local databases.</p>
+        </section>
+        
+        <!-- Controls row: Search field + Grid/List toggle -->
+        <div class="notes-controls-bar">
+          <div class="notes-search-box">
+            <svg viewBox="0 0 24 24" width="16" height="16" class="notes-search-icon"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+            <input type="text" id="notes-search-input" class="form-control-box notes-search-input" placeholder="Type to filter titles, tags, or contents...">
+          </div>
+          
+          <div class="notes-view-toggle">
+            <button id="view-grid-btn" class="toggle-view-btn active" title="Grid View">
+              <svg viewBox="0 0 24 24"><path d="M4 11h5V5H4v6zm0 8h5v-6H4v6zm7 0h5v-6h-5v6zm0-8h5V5h-5v6zm7-6v6h5V5h-5zm0 14h5v-6h-5v6z" fill="currentColor"/></svg>
+            </button>
+            <button id="view-list-btn" class="toggle-view-btn" title="List View">
+              <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zm0-8h14V7H7v2z" fill="currentColor"/></svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Category tags filtering pills -->
+        <div class="filter-pills" id="notes-filter-pills">
+          <span class="filter-pill active" data-filter="all">All Files</span>
+          <span class="filter-pill" data-filter="architecture">Architecture</span>
+          <span class="filter-pill" data-filter="offline">Offline</span>
+          <span class="filter-pill" data-filter="llm">Local LLMs</span>
+          <span class="filter-pill" data-filter="design-system">Design System</span>
+          <span class="filter-pill" data-filter="journal">Journals</span>
+        </div>
+        
+        <!-- Note Cards registry container -->
+        <div id="notes-container" class="notes-grid">
+          <!-- Dynamically populated note cards -->
+        </div>
+        
+        <!-- Empty state fallback container -->
+        <div id="notes-empty-state" class="empty-state-container" style="display:none;">
+          <!-- Madhubani Peacock empty state motif (15% visual weight) -->
+          <svg class="empty-state-icon" viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <!-- Tail feathers fan -->
+            <path d="M 32,54 C 16,50 10,36 14,24 C 18,12 32,6 32,6 C 32,6 46,12 50,24 C 54,36 48,50 32,54 Z" stroke-dasharray="1.5 2" />
+            <!-- Inner fan lines -->
+            <path d="M 32,46 C 22,42 18,32 20,24" />
+            <path d="M 32,46 C 42,42 46,32 44,24" />
+            <!-- Peacock body -->
+            <path d="M 32,48 C 26,48 24,42 26,34 C 28,26 31,20 31,14 C 31,14 33,14 33,14 C 33,20 36,26 38,34 C 40,42 38,48 32,48 Z" fill="currentColor" fill-opacity="0.08" />
+            <!-- Head & Crest -->
+            <circle cx="32" cy="11" r="2.5" fill="currentColor" />
+            <path d="M 32,8 L 32,4 M 30,8 L 28,5 M 34,8 L 36,5" />
+            <circle cx="32" cy="3" r="0.8" fill="currentColor" />
+            <circle cx="28" cy="4" r="0.8" fill="currentColor" />
+            <circle cx="36" cy="4" r="0.8" fill="currentColor" />
+          </svg>
+          <h4 class="empty-state-title">No Memories Found</h4>
+          <p class="empty-state-desc">Try clearing your filters or type a different query in the search bar.</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- FLOATING VOICE BUTTON -->
+  <button class="btn-voice-float" title="Ask Voxium Assistant" aria-label="Activate Voice Assistant">
+    <svg viewBox="0 0 24 24" width="20" height="20">
+      <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z" fill="currentColor"/>
+    </svg>
+  </button>
+
+  <!-- SEARCH MODAL OVERLAY -->
+  <div id="search-modal" class="search-modal">
+    <div class="search-box">
+      <div class="search-input-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" class="search-icon-svg"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+        <input type="text" id="search-modal-input" class="search-modal-input" placeholder="Ask questions or type to search memories...">
+      </div>
+      <div id="search-results" class="search-results">
+        <div style="padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem;">
+          Type to search semantic memories and transcript segments...
+        </div>
+      </div>
+      <div class="search-modal-footer">
+        <span>Press <kbd>Esc</kbd> to exit</span>
+        <span>Use <kbd>↑</kbd><kbd>↓</kbd> to navigate</span>
+        <span>Press <kbd>Enter</kbd> to select</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Common & Page JS Modules -->
+  <script src="js/utils.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/sidebar.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/voice.js"></script>
+</body>
+</html>

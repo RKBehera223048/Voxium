@@ -72,12 +72,12 @@ def make_entity_id(label: str, entity_type: str) -> str:
     """
     Generate a deterministic entity ID from label + type.
 
-    Uses SHA-256 truncated to 12 hex chars, matching graphify's approach
-    for stable, collision-resistant IDs.
+    Uses SHA-256 truncated to 16 hex chars for stable, collision-resistant IDs.
+    (16 hex = 64 bits → collision probability ~50% at ~4 billion entities.)
     """
     normalized = label.strip().lower()
     raw = f"{normalized}:{entity_type}"
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:12]
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
 
 
 # =============================================================================

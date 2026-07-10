@@ -1,0 +1,119 @@
+/* Responsive Layout Queries */
+
+/* Tablet & Mobile Grid Collapses */
+@media (max-width: 992px) {
+  .grid-main-side {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  
+  .settings-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  
+  .settings-menu {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid var(--border-light);
+  }
+  
+  .settings-menu-item {
+    white-space: nowrap;
+  }
+}
+
+/* Mobile Devices */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+  
+  /* Sidebar becomes a top/bottom menu or drawer */
+  .sidebar {
+    width: 100% !important;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .sidebar-header {
+    height: 56px;
+    padding: 0 var(--space-3);
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    padding: 8px var(--space-2);
+    gap: var(--space-1);
+    overflow-x: auto;
+  }
+  
+  .nav-item-link {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .nav-item-icon {
+    margin-right: 6px;
+  }
+  
+  .sidebar-footer {
+    display: none; /* Hide always listening indicator in mobile sidebar footer */
+  }
+  
+  /* Main Content Adjustments */
+  .main-content {
+    height: calc(100vh - 120px);
+  }
+  
+  .navbar {
+    padding: 0 var(--space-3);
+    height: 56px;
+  }
+  
+  .nav-search-trigger {
+    width: 100%;
+    padding: 6px 10px;
+  }
+  
+  .search-hint {
+    display: none;
+  }
+  
+  .nav-stats {
+    display: none; /* Hide status chips on small screens */
+  }
+  
+  /* Grid collapses */
+  .grid-2, .grid-3 {
+    grid-template-columns: 1fr;
+  }
+  
+  .content-wrapper {
+    padding: var(--space-3) var(--space-2) var(--space-5);
+  }
+  
+  /* Meeting Waveform Timer scaling */
+  .meeting-timer {
+    font-size: 1.8rem;
+  }
+  
+  /* Editor folder tree hiding or overlay */
+  .editor-folders-sidebar {
+    display: none; /* Hided by default on mobile editor screen */
+  }
+  
+  .editor-ai-sidebar {
+    display: none; /* Hided by default on mobile editor screen */
+  }
+  
+  .editor-canvas-wrapper {
+    padding: var(--space-3) var(--space-2);
+  }
+  
+  .editor-title-input {
+    font-size: 1.8rem;
+  }
+}

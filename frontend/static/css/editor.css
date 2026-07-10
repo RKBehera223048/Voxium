@@ -1,0 +1,352 @@
+/* Document Editor Styles */
+
+/* Main layout split: Folders Tree + Document Body + AI Side Pane */
+.editor-layout {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* 1. Folders Tree Navigation Pane */
+.editor-folders-sidebar {
+  width: 220px;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.folders-header {
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border-light);
+  letter-spacing: 0.05em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.folder-tree {
+  list-style: none;
+  padding: 12px 8px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.folder-node {
+  margin-bottom: 6px;
+}
+
+.folder-row {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: var(--radius-default);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.folder-row:hover {
+  background-color: rgba(78, 96, 120, 0.05);
+  color: var(--text);
+}
+
+.folder-row.active {
+  background-color: rgba(132, 15, 22, 0.05);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.folder-icon {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  color: inherit;
+}
+
+.notes-list-under-folder {
+  list-style: none;
+  padding-left: 20px;
+  margin-top: 4px;
+}
+
+.note-node-row {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  margin-bottom: 2px;
+}
+
+.note-node-row:hover {
+  background-color: rgba(31, 28, 11, 0.03);
+  color: var(--text);
+}
+
+.note-node-row.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* 2. Document Content Container */
+.editor-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+/* Toolbar formatting bar */
+.editor-toolbar {
+  height: 48px;
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  background-color: var(--bg-primary);
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 20px;
+  background-color: var(--border-light);
+  margin: 0 4px;
+}
+
+.toolbar-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.toolbar-btn:hover {
+  background-color: var(--border-light);
+  color: var(--text);
+}
+
+.toolbar-btn.active {
+  background-color: rgba(132, 15, 22, 0.08);
+  color: var(--primary);
+}
+
+.toolbar-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Document content canvas area */
+.editor-canvas-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.editor-canvas {
+  width: 100%;
+  max-width: 720px;
+  min-height: 500px;
+  outline: none;
+}
+
+.editor-title-input {
+  border: none;
+  outline: none;
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  width: 100%;
+  color: var(--text);
+  margin-bottom: var(--space-3);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.editor-title-input::placeholder {
+  opacity: 0.3;
+}
+
+.editor-content-body {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--text);
+  outline: none;
+  min-height: 400px;
+}
+
+.editor-content-body p {
+  margin-bottom: var(--space-2);
+}
+
+/* 3. Right Sidebar AI Assistant Pane ("Ask Voxium") */
+.editor-ai-sidebar {
+  width: 320px;
+  background-color: var(--bg-secondary);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: transform var(--transition-normal), width var(--transition-normal);
+}
+
+.ai-sidebar-header {
+  height: 48px;
+  padding: 0 var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-light);
+  background-color: #ffffff;
+}
+
+.ai-sidebar-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ai-sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-light);
+  background-color: #ffffff;
+}
+
+.ai-tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 10px 0;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  text-align: center;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.ai-tab-btn:hover {
+  color: var(--text);
+}
+
+.ai-tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.ai-sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* AI Chat Message list */
+.ai-chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ai-chat-bubble {
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  max-width: 90%;
+}
+
+.ai-chat-bubble.user {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border);
+  color: var(--text);
+  align-self: flex-end;
+}
+
+.ai-chat-bubble.assistant {
+  background-color: #ffffff;
+  border: 1px solid var(--border-light);
+  color: var(--text);
+  align-self: flex-start;
+}
+
+.ai-chat-input-wrapper {
+  padding: var(--space-2);
+  border-top: 1px solid var(--border-light);
+  background-color: #ffffff;
+  display: flex;
+  gap: var(--space-1);
+}
+
+.ai-chat-input {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.ai-chat-input:focus {
+  border-color: var(--primary);
+}
+
+/* Semantic Search references */
+.semantic-ref-item {
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.semantic-ref-item:hover {
+  border-color: var(--secondary);
+}
+
+.semantic-ref-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.semantic-ref-score {
+  font-size: 0.7rem;
+  color: var(--success);
+  margin-top: 2px;
+}
+.semantic-ref-desc {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 4px;
+}

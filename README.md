@@ -1,94 +1,77 @@
 # Voxium
 
-Voxium is a 100% local, privacy-first Voice Assistant backend powered by a Flask and WebSocket architecture. It seamlessly integrates a robust speech-processing pipeline with an advanced local Graph-RAG memory layer, ensuring zero external API calls and complete data sovereignty.
+Voxium is a **100% local, privacy-first voice assistant and dictation engine**. Built to run entirely offline, it leverages state-of-the-art open-source AI models to offer real-time voice-to-text processing and intelligent command execution without ever sending your data to the cloud.
 
-## Core Philosophy
-- **100% Local**: All processing—from Voice Activity Detection (VAD) and Speech-to-Text (STT) to Large Language Model (LLM) reasoning and memory clustering—happens on your machine.
-- **Privacy-First**: No data leaves your device. Speaker profiles, transcription history, and the memory graph are all stored locally.
+## Key Features
 
----
+- **100% Offline & Private:** Your voice, data, and memory never leave your device.
+- **Dual Pipeline Architecture:**
+  - **Dictation Mode:** Seamless real-time voice-to-text transcription with auto-cleanup, punctuation, and formatting powered by local LLMs.
+  - **Agent Mode:** Voice-activated AI assistant capable of interpreting natural language intents and executing local tools (e.g., managing the clipboard, querying memory).
+- **LangGraph State Machine:** A robust, deterministic pipeline routing Voice Activity Detection (VAD), Speech-to-Text (STT), Intent Reasoning, and Tool Execution for maximum stability.
+- **Persistent Graph-RAG Memory:** Leverages ChromaDB and Graphify to continuously learn from your conversations and instructions, allowing the agent to recall past context and user preferences over time.
+- **Hardware Agnostic & Optimized:** Runs natively on CPU and GPU with optimized GGUF inference (via `llama-cpp-python`).
+- **High-Fidelity Audio Stack:**
+  - *Wake-Word & VAD:* Tiered Silero VAD dropping background noise and silence before expensive STT processing.
+  - *Transcription (STT):* Lightning-fast offline transcription via Faster-Whisper.
+  - *Synthesis (TTS):* Instant vocal responses powered by Piper TTS.
 
-## 🚀 Features & Architecture
+## Installation
 
-Voxium's architecture is a fusion of advanced speech processing techniques (ported from OpenWhispr) and topology-based knowledge management (ported from Graphify).
+### 1. Prerequisites
+- Python 3.10+
+- FFmpeg (Make sure it is installed and available in your system PATH)
 
-### 1. Advanced Speech Processing Pipeline
+### 2. Environment Setup
+Clone the repository and install the dependencies:
+```bash
+git clone https://github.com/RKBehera223048/Voxium.git
+cd Voxium
 
-#### Strict Acoustic Gate (Anti-Hallucination)
-- **How it works**: Audio goes through a dual-tier validation process before reaching the neural network. 
-  - **Tier 1**: A lightweight windowed RMS/peak accumulator (sub-millisecond latency) filters out pure silence.
-  - **Tier 2**: Silero VAD validates speech presence on 512-sample windows (~50ms latency).
-- **Benefit**: Prevents the STT engine from hallucinating text on background noise or silence, saving compute resources.
+python -m venv .venv
+# On Windows
+.venv\Scripts\activate
+# On macOS/Linux
+source .venv/bin/activate
 
-#### High-Performance STT via NVIDIA Parakeet & Whisper
-- **How it works**: Uses local STT engines with `sherpa-onnx` Python bindings. It auto-tunes threads based on CPU count and segments long audio streams for efficient processing.
-- **Benefit**: Achieves real-time transcription entirely on CPU, removing the overhead of WebSocket server binaries.
+pip install -r requirements.txt
+```
 
-#### Local Speaker Diarization with Persistence
-- **How it works**: Identifies and separates different speakers in the audio stream in real-time. It extracts speaker embeddings and matches them against known profiles using cosine similarity.
-- **Benefit**: Unlike traditional transient diarization, Voxium uses an **SQLite database** to persist speaker profiles across sessions, meaning the system "remembers" voices over time.
+### 3. Model Downloads
+Voxium requires offline models to function. Create a `models/` directory in the root and download your preferred models:
+- **LLM:** Download a GGUF model (e.g., Mistral-7B-Instruct) into `models/llm/`.
+- **TTS:** Piper ONNX voices into `models/tts/`.
+- **STT:** Faster-Whisper models will be downloaded automatically on first run, but can be managed manually in `models/stt/`.
 
-#### Dual-Pipeline Intent Routing
-- **How it works**: Once audio is transcribed, Voxium dynamically routes the text based on intent.
-  - **Agent Route**: If the voice agent is invoked, the text is routed to the local LLM for reasoning and action execution.
-  - **Dictation/Cleanup Route**: If it's pure dictation, it bypasses the agent and can optionally undergo text cleanup/formatting.
-- **Benefit**: Ensures low latency for simple dictation while reserving heavy LLM compute for actual agent interactions.
+Create a `.env` file from the example and configure your model paths:
+```bash
+cp .env.example .env
+```
+Edit `.env` to point `LLM_MODEL_PATH` to your downloaded GGUF file.
 
----
+## Usage
 
-### 2. Intelligent Graph-RAG Memory Layer
+Start the backend server:
+```bash
+python app.py
+```
 
-Voxium features a localized memory engine that extracts relationships and entities from conversations to build a persistent knowledge graph.
+The REST API and WebSocket endpoints will be available at `http://127.0.0.1:5000`. 
+Voxium acts as the orchestrator backend. You can interface with it by streaming audio chunks to the `/api/transcribe` endpoint or through a dedicated desktop client.
 
-#### Local Graph-RAG Engine
-- **How it works**: Uses regex heuristics and standard Python libraries (no GPU embeddings required) to extract named entities, relationships, and dates from conversations. Entities are deterministically hashed (SHA-256).
-- **Benefit**: The graph is ingested at the end of every turn and queried via Breadth-First Search (BFS) to inject relevant historical context directly into the LLM's prompt.
+## Testing
 
-#### Topology-Based Clustering (Community Detection)
-- **How it works**: Automatically groups related memories using Leiden or Louvain community detection algorithms based purely on edge-density (modularity optimization), without dense text embeddings.
-- **Benefit**: Discovers hidden structures and topic clusters within the user's conversational history.
+Voxium comes with an API test suite to verify graph node routing and model pipelines:
+```bash
+pytest tests/test_api.py -v
+```
 
-#### Deterministic AST Parsing
-- **How it works**: Uses Python's built-in `ast` module and regex to map out code documents (classes, functions, headers) deterministically. 
-- **Benefit**: Drastically reduces the LLM context window by allowing it to operate only on specific, localized node boundaries during code or document edits.
+## Architecture
+- `ai_pipelines/`: Core AI logic (transcription, reasoning).
+- `voxgraph/`: LangGraph declarative state graph orchestrating the pipeline.
+- `core/`: State management and memory graph retrieval.
+- `audio/`: VAD, STT, and TTS engines.
+- `memory/`: Vector and Graph-based local storage (ChromaDB + SQLite).
 
----
-
-## 🔌 API & Integration
-
-Voxium provides a rich REST and WebSocket API for seamless frontend integration.
-
-- **WebSocket (`/audio_chunk`)**: Real-time audio streaming and live status updates.
-- **REST APIs**:
-  - `POST /api/transcribe`: Synchronous file transcription.
-  - `GET /api/speakers`: Retrieve persistent speaker profiles.
-  - `GET /api/status`: System and orchestrator health checks.
-- **Graph API Endpoints**:
-  - `GET /api/graph`: Returns the full memory graph in `node_link_data` format.
-  - `GET /api/graph/clusters`: Community assignments and cohesion scores.
-  - `GET /api/graph/search?q=...`: Fuzzy node search.
-  - `GET /api/graph/node/<id>`: Node details and neighbors.
-  - `GET /api/graph/stats`: Topology statistics.
-
----
-
-## 🛠️ Setup & Installation
-
-1. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. **Environment Variables**:
-   Configure the `.env` file with your preferred engine and thresholds.
-   ```env
-   STT_ENGINE=whisper
-   AGENT_NAME=Voxium
-   # Adjust graph, VAD, and diarization thresholds as needed
-   ```
-3. **Model Placement**:
-   Place your Whisper or Parakeet ONNX models inside the `models/stt/` directory.
-4. **Run the Server**:
-   ```bash
-   python app.py
-   ```
-   *The server will start on `http://127.0.0.1:5000` by default.*
+## License
+MIT License

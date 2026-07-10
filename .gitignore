@@ -1,6 +1,32 @@
-.venv/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Environment
 .env
+!.env.example
+.venv/
+
+# Data — user-specific local databases & exports
+data/db/
+data/exports/
+
+# Models — large binary files (multi-GB)
+models/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db
+.DS_Store
+
+# Project walkthroughs (generated, not source)
 walkthrough_OW.md
 walkthrough_GF.md
 walkthrough_CG.md
-__pycache__/

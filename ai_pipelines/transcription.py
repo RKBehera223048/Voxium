@@ -128,7 +128,7 @@ class WhisperEngine(TranscriptionEngine):
                 self._model_size, self._device,
             )
 
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_running_loop()
             self._model = await loop.run_in_executor(
                 None, self._load_model
             )
@@ -168,7 +168,7 @@ class WhisperEngine(TranscriptionEngine):
 
         try:
             # Convert to PCM float32 16kHz
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_running_loop()
             samples = await loop.run_in_executor(
                 None, convert_to_pcm_16k, audio_bytes, source_format
             )
@@ -359,7 +359,7 @@ class ParakeetEngine(TranscriptionEngine):
                 self._model_name, self._num_threads,
             )
 
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_running_loop()
             self._recognizer = await loop.run_in_executor(
                 None, self._create_recognizer
             )
@@ -405,7 +405,7 @@ class ParakeetEngine(TranscriptionEngine):
 
         try:
             # Convert to PCM float32 16kHz
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_running_loop()
             samples = await loop.run_in_executor(
                 None, convert_to_pcm_16k, audio_bytes, source_format
             )

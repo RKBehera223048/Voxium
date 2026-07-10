@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Editor — Voxium</title>
+  <meta name="description" content="Edit documents, upload files, and collaborate with your local AI second brain.">
+  
+  <!-- Core Design System Stylesheets -->
+  <link rel="stylesheet" href="/static/css/variables.css">
+  <link rel="stylesheet" href="/static/css/global.css">
+  <link rel="stylesheet" href="/static/css/layout.css">
+  <link rel="stylesheet" href="/static/css/sidebar.css">
+  <link rel="stylesheet" href="/static/css/navbar.css">
+  <link rel="stylesheet" href="/static/css/buttons.css">
+  <link rel="stylesheet" href="/static/css/cards.css">
+  <link rel="stylesheet" href="/static/css/forms.css">
+  <!-- Page Specific Style -->
+  <link rel="stylesheet" href="/static/css/editor.css">
+  <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- 1. LEFT SIDEBAR NAVIGATION PANEL -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo" onclick="window.location.href='dashboard.html'">
+          <!-- Refined Madhubani Sun/Lotus Icon Accent (15% visual weight) -->
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.15" />
+            <path d="M12 2 C13 5 15 5 12 8 C9 5 11 5 12 2 Z" fill="currentColor" />
+            <path d="M12 22 C13 19 15 19 12 16 C9 19 11 19 12 22 Z" fill="currentColor" />
+            <path d="M2 12 C5 13 5 15 8 12 C5 9 5 11 2 12 Z" fill="currentColor" />
+            <path d="M22 12 C19 13 19 15 16 12 C19 9 19 11 22 12 Z" fill="currentColor" />
+            <circle cx="12" cy="12" r="7" stroke-dasharray="1 2" />
+          </svg>
+          <span class="logo-text">VOXIUM</span>
+        </div>
+        <button id="sidebar-toggle-btn" class="sidebar-toggle" title="Toggle Navigation Menu">
+          <svg viewBox="0 0 24 24" width="18" height="18">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+      
+      <nav style="flex:1;">
+        <ul class="sidebar-nav">
+          <li>
+            <a href="dashboard.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="meeting.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Meeting Mode</span>
+            </a>
+          </li>
+          <li>
+            <a href="editor.html" class="nav-item-link active">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Editor</span>
+            </a>
+          </li>
+          <li>
+            <a href="notes.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Notes</span>
+            </a>
+          </li>
+          <li>
+            <a href="settings.html" class="nav-item-link">
+              <span class="nav-item-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/></svg>
+              </span>
+              <span class="nav-item-label">Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="listening-panel">
+          <div class="listening-info">
+            <span class="listening-badge active"></span>
+            <span class="listening-text">Always Listening</span>
+          </div>
+          <label class="switch-control" style="padding:0;">
+            <input type="checkbox" class="switch-input listening-toggle" checked>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- 2. TOP NAVIGATION BAR -->
+    <div class="main-content">
+      <header class="navbar">
+        <div class="nav-search-trigger" title="Global command palette">
+          <svg viewBox="0 0 24 24" width="16" height="16" class="search-icon-svg"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+          <span>Semantic search memories...</span>
+          <span class="search-hint">Ctrl K</span>
+        </div>
+        
+        <div class="nav-stats">
+          <div class="stat-badge">
+            <span id="whisper-status-dot" class="stat-indicator"></span>
+            <span id="whisper-status-label">Whisper: Offline</span>
+          </div>
+          <div class="stat-badge">
+            <span id="llm-status-dot" class="stat-indicator"></span>
+            <span id="llm-status-label">LLM: Offline</span>
+          </div>
+        </div>
+        
+        <div class="nav-user" onclick="window.location.href='settings.html'">
+          <div class="user-avatar">S</div>
+          <div class="user-info">
+            <span class="user-name">Scribe</span>
+            <span class="user-role">Local Vault</span>
+          </div>
+        </div>
+      </header>
+      
+      <!-- 3. DOCUMENT EDITOR MAIN AREA (NO PADDING - USES SPLIT SIDEBARS) -->
+      <main class="editor-layout">
+        
+        <!-- Left folder directory tree -->
+        <aside class="editor-folders-sidebar">
+          <div class="folders-header">
+            <span>Documents Library</span>
+            <!-- Minimal accent action -->
+            <svg viewBox="0 0 24 24" width="14" height="14" style="color:var(--muted); cursor:pointer;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/></svg>
+          </div>
+          <ul class="folder-tree" id="folder-tree-list">
+            <!-- Simulated folder tree lists -->
+          </ul>
+        </aside>
+        
+        <!-- Center core text sheet workspace -->
+        <section class="editor-workspace">
+          
+          <!-- Editing actions formatting toolbar -->
+          <div class="editor-toolbar">
+            <button class="toolbar-btn" data-action="bold" title="Bold (Ctrl+B)">
+              <svg viewBox="0 0 24 24"><path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM9.5 6h3.5c1.1 0 2 .9 2 2s-.9 2-2 2H9.5V6zm4 8H9.5v-2.5h4c1.1 0 2 .9 2 2.5s-.9 2.5-2 2.5z" fill="currentColor"/></svg>
+            </button>
+            <button class="toolbar-btn" data-action="italic" title="Italic (Ctrl+I)">
+              <svg viewBox="0 0 24 24"><path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z" fill="currentColor"/></svg>
+            </button>
+            
+            <div class="toolbar-separator"></div>
+            
+            <button class="toolbar-btn" data-action="h1" title="Heading 1">
+              <span style="font-weight:700; font-size:13px; font-family:var(--font-sans);">H1</span>
+            </button>
+            <button class="toolbar-btn" data-action="h2" title="Heading 2">
+              <span style="font-weight:700; font-size:11px; font-family:var(--font-sans);">H2</span>
+            </button>
+            
+            <div class="toolbar-separator"></div>
+            
+            <button class="toolbar-btn" data-action="ul" title="Bullet List">
+              <svg viewBox="0 0 24 24"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zm3-10h14v2H7v-2zm0 6h14v2H7v-2zm0 6h14v2H7v-2z" fill="currentColor"/></svg>
+            </button>
+            <button class="toolbar-btn" data-action="ol" title="Numbered List">
+              <svg viewBox="0 0 24 24"><path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9v-.9H2v1zm5-6h14v2H7V7zm0 6h14v2H7v-2zm0 6h14v2H7v-2z" fill="currentColor"/></svg>
+            </button>
+            
+            <div class="toolbar-separator" style="margin-left: auto;"></div>
+            
+            <button class="btn btn-sm btn-light toolbar-btn" data-action="upload" title="Parse PDF document text" style="width:auto; padding: 0 10px;">
+              <svg viewBox="0 0 24 24" width="14" height="14" style="margin-right:4px;"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" fill="currentColor"/></svg>
+              <span>Upload Document</span>
+            </button>
+          </div>
+          
+          <!-- Document Content Editable Sheet wrapper -->
+          <div class="editor-canvas-wrapper">
+            <div class="editor-canvas">
+              <input type="text" id="editor-title" class="editor-title-input" placeholder="Untitled Document">
+              <div id="editor-body" class="editor-content-body" contenteditable="true">
+                <p>Select a document from the folder sidebar or write notes directly...</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- Right side AI Companion helper chat overlay -->
+        <aside class="editor-ai-sidebar">
+          <div class="ai-sidebar-header">
+            <span class="ai-sidebar-title">Ask Voxium</span>
+            <!-- Accent indicator -->
+            <span class="status-pill status-pill-success" style="font-size:0.65rem; padding: 1px 6px;">Active LLM</span>
+          </div>
+          
+          <div class="ai-sidebar-tabs">
+            <button class="ai-tab-btn active" data-tab="summary">AI Summary</button>
+            <button class="ai-tab-btn" data-tab="ask">AI Chat</button>
+            <button class="ai-tab-btn" data-tab="search">Semantics</button>
+          </div>
+          
+          <div class="ai-sidebar-content">
+            
+            <!-- Summary Tab -->
+            <div id="ai-pane-summary" style="display:block;">
+              <ul class="ai-summary-list" style="list-style:none; padding:0;">
+                <li>Select a note to generate automated structural AI summaries.</li>
+              </ul>
+            </div>
+            
+            <!-- Chat Assistant Tab -->
+            <div id="ai-pane-ask" style="display:none;" class="flex-column" style="height: 100%;">
+              <div id="ai-chat-list" class="ai-chat-messages" style="flex:1; overflow-y:auto; min-height: 250px;">
+                <div class="ai-chat-bubble assistant">
+                  Hi, I am your local memory assistant. Ask me questions about this note or past synced meetings.
+                </div>
+              </div>
+              <div class="ai-chat-input-wrapper">
+                <input type="text" id="ai-chat-input" class="ai-chat-input" placeholder="Ask questions...">
+                <button id="ai-chat-send" class="btn btn-primary" style="padding: 8px 10px;">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"/></svg>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Cosine Similarity Semantic References Tab -->
+            <div id="ai-pane-search" style="display:none;">
+              <p class="text-muted" style="font-size:0.75rem; margin-bottom: 12px; line-height: 1.35;">
+                Cos-Similarity ranking queries comparing the current note to SQLite caches.
+              </p>
+              <div id="semantic-search-results">
+                <!-- Javascript rendered reference blocks -->
+              </div>
+            </div>
+            
+          </div>
+        </aside>
+      </main>
+    </div>
+  </div>
+
+  <!-- FLOATING VOICE BUTTON -->
+  <button class="btn-voice-float" title="Ask Voxium Assistant" aria-label="Activate Voice Assistant">
+    <svg viewBox="0 0 24 24" width="20" height="20">
+      <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z" fill="currentColor"/>
+    </svg>
+  </button>
+
+  <!-- SEARCH MODAL OVERLAY -->
+  <div id="search-modal" class="search-modal">
+    <div class="search-box">
+      <div class="search-input-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" class="search-icon-svg"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+        <input type="text" id="search-modal-input" class="search-modal-input" placeholder="Ask questions or type to search memories...">
+      </div>
+      <div id="search-results" class="search-results">
+        <div style="padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem;">
+          Type to search semantic memories and transcript segments...
+        </div>
+      </div>
+      <div class="search-modal-footer">
+        <span>Press <kbd>Esc</kbd> to exit</span>
+        <span>Use <kbd>↑</kbd><kbd>↓</kbd> to navigate</span>
+        <span>Press <kbd>Enter</kbd> to select</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Common & Page JS Modules -->
+  <script src="/static/js/utils.js"></script>
+  <script src="/static/js/animations.js"></script>
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/sidebar.js"></script>
+  <script src="/static/js/navbar.js"></script>
+  <script src="/static/js/voice.js"></script>
+  <script src="/static/js/editor.js"></script>
+</body>
+</html>

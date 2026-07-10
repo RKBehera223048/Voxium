@@ -8,6 +8,8 @@
 flask>=3.0
 flask-socketio>=5.3
 flask-cors>=4.0
+flask-limiter>=3.5
+flask-wtf>=1.2
 eventlet>=0.36
 
 # ── Speech-to-Text ──────────────────────────────────────────────────────────
@@ -41,3 +43,27 @@ networkx>=3.1
 markdown>=3.5
 # Optional: graspologic for Leiden clustering (falls back to Louvain without it)
 # graspologic>=3.3
+
+# ── LangGraph Orchestration ────────────────────────────────────────────────
+langgraph>=0.2
+langchain-core>=0.3
+
+# ── TTS ────────────────────────────────────────────────────────────────────
+piper-tts>=1.2
+
+# ── Wake Word ──────────────────────────────────────────────────────────────
+openwakeword>=0.6
+
+# ── Vector Store ───────────────────────────────────────────────────────────
+chromadb>=0.5
+
+# ── Document Exports ───────────────────────────────────────────────────────
+python-docx>=1.1
+python-pptx>=0.6
+
+# ── Clipboard ──────────────────────────────────────────────────────────────
+pyperclip>=1.8
+
+# ── Config ─────────────────────────────────────────────────────────────────
+pydantic>=2.0
+pydantic-settings>=2.0
