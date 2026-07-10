@@ -1,74 +1,113 @@
-# Voxium
+# 🎙️ Voxium
 
-Voxium is a **100% local, privacy-first voice assistant and dictation engine**. Built to run entirely offline, it leverages state-of-the-art open-source AI models to offer real-time voice-to-text processing and intelligent command execution without ever sending your data to the cloud.
+**Voxium** is a next-generation, 100% offline, privacy-first voice assistant and dictation engine. Designed for complete data sovereignty, Voxium leverages state-of-the-art open-source AI models to offer real-time transcription, intelligent intent parsing, and autonomous command execution—all without ever sending a single byte of your data to the cloud.
 
-## Key Features
+---
 
-- **100% Offline & Private:** Your voice, data, and memory never leave your device.
-- **Dual Pipeline Architecture:**
-  - **Dictation Mode:** Seamless real-time voice-to-text transcription with auto-cleanup, punctuation, and formatting powered by local LLMs.
-  - **Agent Mode:** Voice-activated AI assistant capable of interpreting natural language intents and executing local tools (e.g., managing the clipboard, querying memory).
-- **LangGraph State Machine:** A robust, deterministic pipeline routing Voice Activity Detection (VAD), Speech-to-Text (STT), Intent Reasoning, and Tool Execution for maximum stability.
-- **Persistent Graph-RAG Memory:** Leverages ChromaDB and Graphify to continuously learn from your conversations and instructions, allowing the agent to recall past context and user preferences over time.
-- **Hardware Agnostic & Optimized:** Runs natively on CPU and GPU with optimized GGUF inference (via `llama-cpp-python`).
-- **High-Fidelity Audio Stack:**
-  - *Wake-Word & VAD:* Tiered Silero VAD dropping background noise and silence before expensive STT processing.
-  - *Transcription (STT):* Lightning-fast offline transcription via Faster-Whisper.
-  - *Synthesis (TTS):* Instant vocal responses powered by Piper TTS.
+## 🌟 Core Features
 
-## Installation
+### 🔒 100% Offline & Private
+Your voice, your data, and your memory never leave your device. Voxium requires **no API keys, no internet connection, and no subscriptions**. It is built for environments where privacy and security are non-negotiable.
+
+### 🔀 Dual-Pipeline Architecture
+Voxium intelligently routes your voice input based on your intent:
+1. **Dictation Mode:** Seamlessly dictates your speech into highly accurate text. An integrated LLM cleanup node automatically fixes punctuation, formats paragraphs, and corrects grammar before copying it to your clipboard or editor.
+2. **Agent Mode:** A fully autonomous voice assistant. Ask Voxium questions or give it commands, and it will reason through your request, invoke local tools, and reply to you using natural text-to-speech.
+
+### 🧠 LangGraph State Machine Orchestrator
+At the heart of Voxium is a robust, deterministic state graph. Complex processing is seamlessly orchestrated through a pipeline:
+`Audio Stream ➔ Voice Activity Detection (VAD) ➔ Speech-to-Text (STT) ➔ Intent Routing ➔ LLM Reasoning / Cleanup ➔ Tool Execution ➔ Text-to-Speech (TTS)`
+This ensures maximum stability, easy extensibility, and rapid short-circuiting (e.g., dropping background noise before expensive STT processing).
+
+### 🕸️ Persistent Graph-RAG Memory
+Voxium remembers. Using **ChromaDB** coupled with a custom **Graphify memory engine**, Voxium builds a persistent knowledge graph of your conversations, instructions, and preferences. Over time, the agent learns context about you, allowing for highly personalized assistance.
+
+### 💻 Hardware Agnostic LLM Execution
+Voxium is optimized for the hardware you already own. By leveraging `llama-cpp-python` and the **GGUF** model format, Voxium runs highly optimized LLMs natively on standard CPUs, Apple Silicon (Metal), or NVIDIA GPUs (CUDA).
+
+### 🎵 High-Fidelity Local Audio Stack
+- **Noise Rejection (VAD):** A multi-tier pipeline using Silero Neural VAD filters out background noise and silence, ensuring the transcription engine is only triggered by actual human speech.
+- **Lightning-Fast Transcription (STT):** Powered by **Faster-Whisper**, delivering near-instantaneous offline transcription.
+- **Natural Synthesis (TTS):** Instant, conversational vocal responses powered by **Piper TTS**.
+
+### 🛠️ Extensible Tool System
+Voxium's Agent can autonomously invoke local tools based on your intent. Built-in tools include:
+- **Clipboard Manager:** Read from or write to your system clipboard.
+- **File & Document Manager:** Create, edit, and read local documents and markdown files.
+- **Local Search:** Retrieve information from your personal knowledge base.
+
+### 🌐 Rich Local Frontend
+Voxium includes a beautifully crafted, dynamic Web UI (HTML/JS/CSS) featuring a dashboard, text editor, meeting notes, and settings page. It communicates with the Python backend in real-time via WebSockets.
+
+---
+
+## 🚀 Getting Started
 
 ### 1. Prerequisites
-- Python 3.10+
-- FFmpeg (Make sure it is installed and available in your system PATH)
+- **Python 3.10+**
+- **FFmpeg:** Ensure FFmpeg is installed and added to your system `PATH` (required for audio chunk processing).
 
 ### 2. Environment Setup
-Clone the repository and install the dependencies:
+Clone the repository and install the dependencies in a virtual environment:
 ```bash
 git clone https://github.com/RKBehera223048/Voxium.git
 cd Voxium
 
+# Create and activate a virtual environment
 python -m venv .venv
-# On Windows
+
+# On Windows:
 .venv\Scripts\activate
-# On macOS/Linux
+# On macOS/Linux:
 source .venv/bin/activate
 
+# Install dependencies
 pip install -r requirements.txt
 ```
 
 ### 3. Model Downloads
-Voxium requires offline models to function. Create a `models/` directory in the root and download your preferred models:
-- **LLM:** Download a GGUF model (e.g., Mistral-7B-Instruct) into `models/llm/`.
-- **TTS:** Piper ONNX voices into `models/tts/`.
-- **STT:** Faster-Whisper models will be downloaded automatically on first run, but can be managed manually in `models/stt/`.
+Voxium requires offline models to function. Create a `models/` directory in the root of the project and download your preferred open-source models:
+- **LLM:** Download a GGUF model (e.g., *Mistral-7B-Instruct* or *Llama-3-8B*) and place it in `models/llm/`.
+- **TTS:** Download a Piper ONNX voice model into `models/tts/`.
+- **STT:** Faster-Whisper models will be downloaded automatically to `models/stt/` on first run.
 
-Create a `.env` file from the example and configure your model paths:
+Create your environment configuration file:
 ```bash
 cp .env.example .env
 ```
-Edit `.env` to point `LLM_MODEL_PATH` to your downloaded GGUF file.
+Edit the `.env` file to point `LLM_MODEL_PATH` to your downloaded GGUF file.
 
-## Usage
+---
 
-Start the backend server:
+## 🖥️ Usage
+
+Start the backend orchestrator:
 ```bash
 python app.py
 ```
 
-The REST API and WebSocket endpoints will be available at `http://127.0.0.1:5000`. 
-Voxium acts as the orchestrator backend. You can interface with it by streaming audio chunks to the `/api/transcribe` endpoint or through a dedicated desktop client.
+- The REST API and WebSocket endpoints will boot up at `http://127.0.0.1:5000`. 
+- Open `http://127.0.0.1:5000` in your browser to access the Voxium Dashboard and interface directly with the assistant.
+- Developers can interface with Voxium by streaming audio chunks to the `/api/transcribe` endpoint.
 
-## Testing
+---
 
-Voxium comes with an API test suite to verify graph node routing and model pipelines:
+## 🧪 Testing
+
+Voxium comes with an extensive Pytest suite to verify graph node routing, conditional edges, and model pipelines without requiring hardware microphones:
+
 ```bash
 pytest tests/test_api.py -v
 ```
 
-## Architecture
-- `ai_pipelines/`: Core AI logic (transcription, reasoning).
-- `voxgraph/`: LangGraph declarative state graph orchestrating the pipeline.
-- `core/`: State management and memory graph retrieval.
+---
+
+## 🏗️ Project Architecture
+
+- `ai_pipelines/` & `llm/`: Core AI reasoning, prompt management, and inference logic.
+- `voxgraph/`: The declarative LangGraph state machine orchestrating the end-to-end pipeline.
+- `core/`: Application state management, event bus, and intent routing.
 - `audio/`: VAD, STT, and TTS engines.
 - `memory/`: Vector and Graph-based local storage (ChromaDB + SQLite).
+- `tools/`: Extensible tool definitions invoked by the Agent.
+- `frontend/`: The local Web UI and WebSocket client logic.
